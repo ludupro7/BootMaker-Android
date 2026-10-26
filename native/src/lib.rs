@@ -451,7 +451,7 @@ pub extern "system" fn Java_id_bootmaker_cok_NativeCore_buildMbr(
     let result = catch_unwind(AssertUnwindSafe(|| build_mbr(total_sectors as u64)));
     match result {
         Ok(Ok(mbr)) => match env.byte_array_from_slice(&mbr) {
-            Ok(value) => value,
+            Ok(value) => **value,
             Err(_) => ptr::null_mut(),
         },
         _ => ptr::null_mut(),
@@ -460,7 +460,7 @@ pub extern "system" fn Java_id_bootmaker_cok_NativeCore_buildMbr(
 
 #[no_mangle]
 pub extern "system" fn Java_id_bootmaker_cok_NativeCore_writeBootcard(
-    env: JNIEnv,
+    mut env: JNIEnv,
     _class: JClass,
     uboot_fd: jint,
     out_fd: jint,
@@ -480,7 +480,7 @@ pub extern "system" fn Java_id_bootmaker_cok_NativeCore_writeBootcard(
 
 #[no_mangle]
 pub extern "system" fn Java_id_bootmaker_cok_NativeCore_verifyBootcard(
-    env: JNIEnv,
+    mut env: JNIEnv,
     _class: JClass,
     fd: jint,
     uboot_fd: jint,
